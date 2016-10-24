@@ -137,7 +137,7 @@ public class ForecastFragment extends Fragment implements TaskCompleted{
             high = (high * 1.8) + 32;
             low = (low * 1.8) + 32;
         } else if (!unit.equals(getString(R.string.pref_units_metric))) {
-            Log.d("Bernardino", "Unity type not found: " + unit);
+            Log.d("ForecastFragment", "Unity type not found: " + unit);
         }
 
 
@@ -265,7 +265,6 @@ public class ForecastFragment extends Fragment implements TaskCompleted{
             String forecastJsonStr = null;
 
             String [] returnWeather;
-            String [] returnCoord;
 
             try {
 
@@ -275,7 +274,7 @@ public class ForecastFragment extends Fragment implements TaskCompleted{
                 final String FORMAT_PARAM = "mode";
                 final String FORMAT_UNIT = "units";
                 final String DAYS_PARAM = "cnt";
-                final String FORMAT_APPID = "APPID";//"28e8f0a11ccf45bd63c8a256f8b2bb01";
+                final String FORMAT_APPID = "APPID";
 
                 final String appId = "28e8f0a11ccf45bd63c8a256f8b2bb01";
                 String units = "metric";
@@ -296,7 +295,7 @@ public class ForecastFragment extends Fragment implements TaskCompleted{
                 // http://openweathermap.org/API#forecast
                 String sUri = uriBuilder.toString();
 
-                Log.d("Bernardino", sUri);
+                Log.d(LOG_TAG, sUri);
 
                 URL url = new URL(sUri);
 
