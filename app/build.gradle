@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.sunshine.app"
-        minSdkVersion 11
+        minSdkVersion 10
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -17,9 +17,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', '"28e8f0a11ccf45bd63c8a256f8b2bb01"'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.android.support:support-v4:21.0.3'
 }
