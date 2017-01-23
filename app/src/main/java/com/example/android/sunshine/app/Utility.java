@@ -46,6 +46,10 @@ public class Utility {
             temp = temperature;
         }
 
+        if (context.getString(R.string.format_temperature, temp).contains("-0")) {
+          temp = 0;
+        }
+
         return context.getString(R.string.format_temperature, temp);
     }
 
