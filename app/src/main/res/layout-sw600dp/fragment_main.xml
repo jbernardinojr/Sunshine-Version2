@@ -10,8 +10,7 @@
     tools:context=".MainActivity$ForecastFragment">
 
     <ListView
-        android:id="@+id/listview_forecast"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        style="@style/BackgroundItemSelector"
+        android:id="@+id/listview_forecast" />
 
 </FrameLayout>
