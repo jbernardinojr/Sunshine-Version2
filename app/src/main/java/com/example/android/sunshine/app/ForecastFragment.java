@@ -60,6 +60,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private ForecastAdapter mForecastAdapter;
     private int mPosition;
     private ListView mListView;
+    private boolean mUseTodayLayout;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -108,7 +109,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // The CursorAdapter will take data from our cursor and populate the ListView.
 
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
@@ -137,6 +137,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if (savedInstanceState != null && savedInstanceState.containsKey(POSITION_KEY)) {
             mPosition = savedInstanceState.getInt(POSITION_KEY);
         }
+
+        mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
 
         return rootView;
     }
@@ -174,6 +176,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 null,
                 null,
                 sortOrder);
+    }
+
+
+    public void setUseTodayLayout (boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
     }
 
     @Override

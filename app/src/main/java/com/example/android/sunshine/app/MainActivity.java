@@ -59,6 +59,9 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
+
+        ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+        ff.setUseTodayLayout(!mTwoPane);
     }
 
     @Override
