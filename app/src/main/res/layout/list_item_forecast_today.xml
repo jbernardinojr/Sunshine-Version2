@@ -2,20 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
-    android:background="@drawable/touch_selector"
-    android:padding="16dp">
+    android:background="@color/sunshine_blue">
 
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal">
+        android:layout_width="0dp"
+        android:layout_weight="7"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="60dp"
+        android:orientation="vertical">
 
         <TextView
             android:text="Today, June 4"
@@ -23,6 +24,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp"
+            android:textColor="#FFFFFF"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:fontFamily="sans-serif-condensed"
             android:id="@+id/list_item_date_textview" />
 
         <TextView
@@ -31,6 +35,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="3dp"
+            android:textColor="#FFFFFF"
+            android:textSize="72sp"
+            android:fontFamily="sans-serif-condensed"
             android:id="@+id/list_item_high_textview" />
 
         <TextView
@@ -39,28 +46,35 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="3dp"
-            android:id="@+id/list_item_low_textview" />
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/list_item_low_textview"
+            android:layout_marginLeft="8dp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal">
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|bottom">
 
         <ImageView
-            android:layout_width="match_parent"
+            android:id="@+id/list_item_icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/list_item_icon" />
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:text="Clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-condensed"
             android:id="@+id/list_item_forecast_textview" />
 
     </LinearLayout>

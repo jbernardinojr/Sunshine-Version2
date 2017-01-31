@@ -26,4 +26,10 @@
         <item name="android:choiceMode">singleChoice</item>
     </style>
 
+    <!-- Style for forecast listview -->
+    <style name="ForecastListStyle">
+        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
+        for two-pane layout -->
+    </style>
+
 </resources>
