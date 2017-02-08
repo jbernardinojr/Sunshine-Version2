@@ -192,6 +192,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             mListView.smoothScrollToPosition(mPosition);
         }
         mForecastAdapter.swapCursor(cursor);
+
+        if (!mUseTodayLayout && cursor.getPosition() == 0) {
+            mListView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ListView listView = mListView;
+                    listView.setSelection(0);
+                    listView.performItemClick(listView.getChildAt(0), 0, 0);
+                }
+            }, 500);
+        }
     }
 
     @Override
