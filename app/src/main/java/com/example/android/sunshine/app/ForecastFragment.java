@@ -193,13 +193,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         }
         mForecastAdapter.swapCursor(cursor);
 
-        if (!mUseTodayLayout && cursor.getPosition() == 0) {
+        if (!mUseTodayLayout && cursor.moveToFirst() && cursor.getPosition() == 0) {
             mListView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     ListView listView = mListView;
                     listView.setSelection(0);
-                    listView.performItemClick(listView.getChildAt(0), 0, 0);
+                    listView.performItemClick(listView.getChildAt(0), 0, listView.getItemIdAtPosition(0));
                 }
             }, 500);
         }
