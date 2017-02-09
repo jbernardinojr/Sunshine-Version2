@@ -76,5 +76,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="talkback_weatherIcon">Weather Icon</string>
+    <string name="talkback_date">Date of the day</string>
+    <string name="talkback_low_temp">Low temperature of the day</string>
+    <string name="talkback_humidity">Humidity of the air</string>
+    <string name="talkback_wind_speed">Wind Speed</string>
+    <string name="talkback_pressure">Atmospheric pressure</string>
+    <string name="talkback_high_temp">High temperature of the day</string>
+    <string name="talkback_description">Weather forecast of the day</string>
+    <string name="talkback_item_date">Weather Forecast Item</string>
 
 </resources>
