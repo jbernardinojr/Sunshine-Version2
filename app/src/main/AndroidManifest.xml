@@ -5,6 +5,9 @@
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- This permission is necessary in order for Sunshine to know the network state. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- Permissions required by the sync adapter -->
     <uses-permission
         android:name="android.permission.READ_SYNC_SETTINGS"/>

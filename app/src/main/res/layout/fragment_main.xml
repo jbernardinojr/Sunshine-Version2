@@ -9,4 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null" />
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tv_empty_msg"
+        android:text="@string/no_weather_info"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:padding="@dimen/activity_horizontal_margin"/>
+
 </FrameLayout>

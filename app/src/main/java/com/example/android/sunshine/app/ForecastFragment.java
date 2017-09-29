@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
@@ -24,7 +27,8 @@ import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
  */
-public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ForecastFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String POSITION_KEY = "position";
     private static final int FORECAST_LOADER = 0;
@@ -65,6 +69,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPosition;
     private ListView mListView;
     private boolean mUseTodayLayout;
+    private View emptyView;
+    private SharedPreferences sp;
+    private TextView tvEmptyList;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -116,6 +123,27 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    public void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_location_status_key))){
+            updateEmptyView();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // The CursorAdapter will take data from our cursor and populate the ListView.
@@ -125,6 +153,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        emptyView = rootView.findViewById(R.id.tv_empty_msg);
+        mListView.setEmptyView(emptyView);
         mListView.setAdapter(mForecastAdapter);
 
         // We'll call our MainActivity
@@ -250,6 +280,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 }
             }, 500);
         }
+
+        if (!cursor.moveToFirst() && !Utility.isNetworkAvailable(getActivity())) {
+            if (emptyView instanceof TextView) {
+                tvEmptyList = (TextView) emptyView;
+                tvEmptyList.setText(getString(R.string.no_weather_info)
+                        + "\n" + getString(R.string.network_not_available));
+            }
+        }
     }
 
     @Override
@@ -263,5 +301,28 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             outState.putInt(POSITION_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    private void updateEmptyView(){
+        if (mForecastAdapter.getCount() == 0){
+            tvEmptyList = (TextView) getView().findViewById(R.id.tv_empty_msg);
+            if (null != tvEmptyList){
+                int message = R.string.no_weather_info;
+                @SunshineSyncAdapter.LocationStatus int location = Utility.getLocationStatus(getActivity());
+                switch (location){
+                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN:
+                        message = R.string.empty_forecast_list_server_down;
+                        break;
+                    case  SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
+                        message = R.string.empty_forecast_list_server_error;
+                        break;
+                    default:
+                        if (!Utility.isNetworkAvailable(getActivity())){
+                            message = R.string.network_not_available;
+                        }
+                }
+                tvEmptyList.setText(message);
+            }
+        }
     }
 }

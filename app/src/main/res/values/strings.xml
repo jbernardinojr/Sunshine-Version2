@@ -101,5 +101,11 @@
     <string name="pref_enable_notifications_title">Forecast Notifications</string>
     <string name="pref_enable_notifications_true">Enable</string>
     <string name="pref_enable_notifications_false">Disable</string>
+    <string name="no_weather_info">No Weather Information Available.</string>
+    <string name="network_not_available">The network is not available to fetch weather data.</string>
+    <string name="pref_location_status_key">locationStatus</string>
+    <string name="empty_forecast_list_server_down">No weather information. The server is not returning data.</string>
+    <string name="empty_forecast_list_server_error">No weather information. The server is not returning valid data. Check for an updated version of Sunshine.</string>
+    <string name="empty_forecast_list_server_unknow">Unknow Server Error</string>
 
 </resources>
