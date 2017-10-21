@@ -79,9 +79,12 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int LOCATION_STATUS_SERVER_DOWN = 1;
     public static final int LOCATION_STATUS_SERVER_INVALID = 2;
     public static final int LOCATION_STATUS_UNKNOWN = 3;
+    public static final int LOCATION_STATUS_INVALID = 4;
+
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN})
+    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID,
+            LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
     public @interface LocationStatus{}
 
     //Constructor
@@ -126,6 +129,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     .appendQueryParameter(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY)
                     .build();
 
+            Log.d("Bernardino", "build uri -> " + builtUri.toString());
+
             URL url = new URL(builtUri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
@@ -133,12 +138,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
+            int status = urlConnection.getResponseCode();
+            Log.d("Bernardino", "Status = " + status);
+
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
-                //return null;
+                return;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -155,10 +163,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 setLocationStatus(getContext(), LOCATION_STATUS_SERVER_DOWN);
             }
             forecastJsonStr = buffer.toString();
+            Log.d("Bernardino", forecastJsonStr);
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            setLocationStatus(getContext(), LOCATION_STATUS_OK);
+            setLocationStatus(getContext(), LOCATION_STATUS_INVALID);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
         } catch (JSONException e) {
@@ -223,12 +232,31 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         final String OWM_DESCRIPTION = "main";
         final String OWM_WEATHER_ID = "id";
 
+        final String OWM_MESSAGE_CODE = "cod";
+
         try {
 
             Log.d("Bernardino", "forecastJsonStr = " + forecastJsonStr);
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
-            JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
+            Log.d("Bernardino", "forecastJson.has(OWM_MESSAGE_CODE)=" + forecastJson.has(OWM_MESSAGE_CODE));
+
+
+            if (forecastJson.has(OWM_MESSAGE_CODE)) {
+                int errCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+                Log.d("Bernardino", "errCode = " + errCode);
+                switch (errCode) {
+                    case HttpURLConnection.HTTP_OK:
+                        break;
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        setLocationStatus(getContext(), LOCATION_STATUS_INVALID);
+                        return;
+                    default:
+                        setLocationStatus(getContext(), LOCATION_STATUS_SERVER_DOWN);
+                }
+            }
+
+            JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
             JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
             String cityName = cityJson.getString(OWM_CITY_NAME);
             double cityLatitude = 0D;
@@ -561,5 +589,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(context.getString(R.string.pref_location_status_key), locationStatus);
+        editor.commit();
     }
 }
