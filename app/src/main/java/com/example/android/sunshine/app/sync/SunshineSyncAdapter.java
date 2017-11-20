@@ -552,8 +552,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     //build your notification here.
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(context)
-                                    .setSmallIcon(R.drawable.ic_clear)
-                                    .setContentTitle("Sunshine")
+                                    .setSmallIcon(iconId)
+                                    .setContentTitle(title)
                                     .setContentText(contentText);
                     // Creates an explicit intent for an Activity in your app
                     Intent resultIntent = new Intent(context, MainActivity.class);
